@@ -1,28 +1,26 @@
-import { lookupArchive } from "@subsquid/archive-registry";
-import { Store, TypeormDatabase } from "@subsquid/typeorm-store";
+import { lookupArchive } from '@subsquid/archive-registry';
+import { Store, TypeormDatabase } from '@subsquid/typeorm-store';
 import {
   BatchContext,
   BatchProcessorItem,
   EvmLogEvent,
   SubstrateBatchProcessor,
   SubstrateBlock,
-} from "@subsquid/substrate-processor";
-import { In } from "typeorm";
-import { ethers } from "ethers";
-import { CHAIN_NODE, contractAddress, getContractEntity } from "./contract";
-import { Owner, Token, Transfer } from "./model";
-import * as erc721 from "./abi/erc721";
+} from '@subsquid/substrate-processor';
+import { In } from 'typeorm';
+import { ethers } from 'ethers';
+import { CHAIN_NODE, contractAddress, getContractEntity } from './contract';
 
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
   .setBatchSize(500)
   .setDataSource({
     chain: CHAIN_NODE,
-    archive: lookupArchive("moonriver", { release: "FireSquid" }),
+    archive: lookupArchive('moonriver', { release: 'FireSquid' }),
   })
-  .setTypesBundle("moonbeam")
+  .setTypesBundle('moonbeam')
   .addEvmLog(contractAddress, {
-    filter: [erc721.events["Transfer(address,address,uint256)"].topic],
+    filter: [erc721.events['Transfer(address,address,uint256)'].topic],
   });
 
 type Item = BatchProcessorItem<typeof processor>;
@@ -33,7 +31,7 @@ processor.run(database, async (ctx) => {
 
   for (const block of ctx.blocks) {
     for (const item of block.items) {
-      if (item.name === "EVM.Log") {
+      if (item.name === 'EVM.Log') {
         const transfer = handleTransfer(ctx, block.header, item.event);
         transfersData.push(transfer);
       }
@@ -59,7 +57,7 @@ function handleTransfer(
   event: EvmLogEvent
 ): TransferData {
   const { from, to, tokenId } = erc721.events[
-    "Transfer(address,address,uint256)"
+    'Transfer(address,address,uint256)'
   ].decode(event.args);
 
   const transfer: TransferData = {
