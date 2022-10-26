@@ -1,186 +1,164 @@
 type SystemInfo @entity {
-  id: ID!
+    id: ID!
 
-  exchangeCount: BigInt!
-  swapCount: BigInt!
-  tokenCount: BigInt!
+    exchangeCount: BigInt!
+    swapCount: BigInt!
+    tokenCount: BigInt!
 
-  updated: BigInt!
-  updatedAtBlock: BigInt!
-  updatedAtTransaction: Bytes!
+    updated: BigInt!
+    updatedAtBlock: BigInt!
+    updatedAtTransaction: Bytes!
 }
 
 type Swap @entity {
-  id: ID!
+    id: ID!
 
-  # swap address
-  address: Bytes!
+    # swap address
+    address: Bytes!
 
-  # number of tokens supported
-  numTokens: Int!
+    # supported tokens
+    tokens: [TokenObject!]!
 
-  # supported tokens
-  tokens: [TokenObject!]!
+    # token balances
+    balances: [BigInt!]!
 
-  # token balances
-  balances: [BigInt!]!
+    # liquidity provider token
+    lpToken: Bytes!
 
-  # liquidity provider token
-  lpToken: Bytes!
+    virtualPrice: BigInt!
 
-  # TODO: figure out what this is
-  # amplification coefficient
-  a: BigInt!
+    # owner address
+    owner: Bytes!
 
-  swapFee: BigInt!
-  adminFee: BigInt!
-  withdrawFee: BigInt
+    events: [SwapEvent!] @derivedFrom(field: "swap")
 
-  virtualPrice: BigInt!
+    # cumulative daily tvl
+    dailyTvls: [DailyTvl!] @derivedFrom(field: "swap")
 
-  # owner address
-  owner: Bytes!
+    # cumulative hourly trade volume
+    hourlyVolumes: [HourlyVolume!] @derivedFrom(field: "swap")
 
-  events: [SwapEvent!] @derivedFrom(field: "swap")
+    # cumulative daily trade volume
+    dailyVolumes: [DailyVolume!] @derivedFrom(field: "swap")
 
-  exchanges: [Exchange!] @derivedFrom(field: "swap")
+    # cumulative weekly trade volume
+    weeklyVolumes: [WeeklyVolume!] @derivedFrom(field: "swap")
 
-  # cumulative daily tvl
-  dailyTvls: [DailyTvl!] @derivedFrom(field: "swap")
-
-  # cumulative hourly trade volume
-  hourlyVolumes: [HourlyVolume!] @derivedFrom(field: "swap")
-
-  # cumulative daily trade volume
-  dailyVolumes: [DailyVolume!] @derivedFrom(field: "swap")
-
-  # cumulative weekly trade volume
-  weeklyVolumes: [WeeklyVolume!] @derivedFrom(field: "swap")
-
-  "BigDecimal"
-  tvl: String!
-  "BigDecimal"
-  apy: String!
+    "BigDecimal"
+    tvl: String!
+    "BigDecimal"
+    apy: String!
 }
 
 interface PoolTVL {
-  swap: Swap!
-  timestamp: BigInt!
-  "BigDecimal"
-  tvl: String!
+    swap: Swap!
+    timestamp: BigInt!
+    "BigDecimal"
+    tvl: String!
 }
 
 type DailyTvl implements PoolTVL @entity {
-  id: ID!
-  swap: Swap!
-  timestamp: BigInt!
-  "BigDecimal"
-  tvl: String!
+    id: ID!
+    swap: Swap!
+    timestamp: BigInt!
+    "BigDecimal"
+    tvl: String!
 }
 
 interface TradeVolume {
-  swap: Swap!
-  timestamp: BigInt!
-  "BigDecimal"
-  volume: String!
+    swap: Swap!
+    timestamp: BigInt!
+    "BigDecimal"
+    volume: String!
 }
 
 type DailyVolume implements TradeVolume @entity {
-  id: ID!
-  swap: Swap!
-  timestamp: BigInt!
-  "BigDecimal"
-  volume: String!
+    id: ID!
+    swap: Swap!
+    timestamp: BigInt!
+    "BigDecimal"
+    volume: String!
 }
 
 type HourlyVolume implements TradeVolume @entity {
-  id: ID!
-  swap: Swap!
-  timestamp: BigInt!
-  "BigDecimal"
-  volume: String!
+    id: ID!
+    swap: Swap!
+    timestamp: BigInt!
+    "BigDecimal"
+    volume: String!
 }
 
 type WeeklyVolume implements TradeVolume @entity {
-  id: ID!
-  swap: Swap!
-  timestamp: BigInt!
-  "BigDecimal"
-  volume: String!
+    id: ID!
+    swap: Swap!
+    timestamp: BigInt!
+    "BigDecimal"
+    volume: String!
 }
 
 type SwapEvent @entity {
-  id: ID!
+    id: ID!
 
-  swap: Swap!
+    swap: Swap!
 
-  data: SwapEventData
+    data: SwapEventData
 
-  block: BigInt!
-  timestamp: BigInt!
-  transaction: Bytes!
+    block: BigInt!
+    timestamp: BigInt!
+    transaction: Bytes!
 }
 
 # TODO: define swap event data
 union SwapEventData = AddLiquidityEventData | RemoveLiquidityEventData
 
 type AddLiquidityEventData {
-  provider: Bytes!
-  tokenAmounts: [BigInt!]!
-  fees: [BigInt!]!
-  invariant: BigInt
-  lpTokenSupply: BigInt!
+    provider: Bytes!
+    tokenAmounts: [BigInt!]!
+    fees: [BigInt!]!
+    lpTokenSupply: BigInt!
 }
 
 type RemoveLiquidityEventData {
-  provider: Bytes!
-  tokenAmounts: [BigInt!]!
-  fees: [BigInt!]
-  invariant: BigInt
-  lpTokenSupply: BigInt!
+    provider: Bytes!
+    tokenAmounts: [BigInt!]!
+    fees: [BigInt!]
+    lpTokenSupply: BigInt!
 }
 
 type Exchange @entity {
-  id: ID!
+    id: ID!
 
-  swap: Swap!
+    swap: Swap!
 
-  data: ExchangeData
+    data: ExchangeData
 
-  block: BigInt!
-  timestamp: BigInt!
-  transaction: Bytes!
-}
-
-union ExchangeData = TokenExchangeData | TokenExchangeUnderlyingData
-
-type TokenExchangeData {
-  buyer: Bytes!
-  boughtId: BigInt!
-  tokensBought: BigInt!
-  soldId: BigInt!
-  tokensSold: BigInt!
-}
-
-type TokenExchangeUnderlyingData {
-  buyer: Bytes!
-  boughtId: BigInt!
-  tokensBought: BigInt!
-  soldId: BigInt!
-  tokensSold: BigInt!
+    block: BigInt!
+    timestamp: BigInt!
+    transaction: Bytes!
 }
 
 type Token @entity {
-  id: ID!
-  address: Bytes!
-  decimals: BigInt!
-  name: String
-  symbol: String
+    id: ID!
+    address: Bytes!
+    decimals: BigInt!
+    name: String
+    symbol: String
 }
 
 type TokenObject {
-  address: Bytes!
-  decimals: BigInt!
-  name: String
-  symbol: String
+    address: Bytes!
+    decimals: BigInt!
+    name: String
+    symbol: String
 }
+
+# event Mint(address indexed sender, uint256 amount0, uint256 amount1);
+# event Burn(address indexed sender, uint256 amount0, uint256 amount1, address indexed to);
+# event Swap(
+#     address indexed sender,
+#     uint256 amount0In,
+#     uint256 amount1In,
+#     uint256 amount0Out,
+#     uint256 amount1Out,
+#     address indexed to
+# );
