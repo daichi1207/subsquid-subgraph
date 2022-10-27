@@ -111,6 +111,7 @@ type SwapEvent @entity {
 # TODO: define swap event data
 union SwapEventData = AddLiquidityEventData | RemoveLiquidityEventData
 
+# use mint event
 type AddLiquidityEventData {
     provider: Bytes!
     tokenAmounts: [BigInt!]!
@@ -118,23 +119,12 @@ type AddLiquidityEventData {
     lpTokenSupply: BigInt!
 }
 
+# use burn event
 type RemoveLiquidityEventData {
     provider: Bytes!
     tokenAmounts: [BigInt!]!
     fees: [BigInt!]
     lpTokenSupply: BigInt!
-}
-
-type Exchange @entity {
-    id: ID!
-
-    swap: Swap!
-
-    data: ExchangeData
-
-    block: BigInt!
-    timestamp: BigInt!
-    transaction: Bytes!
 }
 
 type Token @entity {
