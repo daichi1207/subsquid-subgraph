@@ -6,7 +6,6 @@ export class RemoveLiquidityEventData {
   private _provider!: Uint8Array
   private _tokenAmounts!: (bigint)[]
   private _fees!: (bigint)[] | undefined | null
-  private _invariant!: bigint | undefined | null
   private _lpTokenSupply!: bigint
 
   constructor(props?: Partial<Omit<RemoveLiquidityEventData, 'toJSON'>>, json?: any) {
@@ -15,7 +14,6 @@ export class RemoveLiquidityEventData {
       this._provider = marshal.bytes.fromJSON(json.provider)
       this._tokenAmounts = marshal.fromList(json.tokenAmounts, val => marshal.bigint.fromJSON(val))
       this._fees = json.fees == null ? undefined : marshal.fromList(json.fees, val => marshal.bigint.fromJSON(val))
-      this._invariant = json.invariant == null ? undefined : marshal.bigint.fromJSON(json.invariant)
       this._lpTokenSupply = marshal.bigint.fromJSON(json.lpTokenSupply)
     }
   }
@@ -46,14 +44,6 @@ export class RemoveLiquidityEventData {
     this._fees = value
   }
 
-  get invariant(): bigint | undefined | null {
-    return this._invariant
-  }
-
-  set invariant(value: bigint | undefined | null) {
-    this._invariant = value
-  }
-
   get lpTokenSupply(): bigint {
     assert(this._lpTokenSupply != null, 'uninitialized access')
     return this._lpTokenSupply
@@ -69,7 +59,6 @@ export class RemoveLiquidityEventData {
       provider: marshal.bytes.toJSON(this.provider),
       tokenAmounts: this.tokenAmounts.map((val: any) => marshal.bigint.toJSON(val)),
       fees: this.fees == null ? undefined : this.fees.map((val: any) => marshal.bigint.toJSON(val)),
-      invariant: this.invariant == null ? undefined : marshal.bigint.toJSON(this.invariant),
       lpTokenSupply: marshal.bigint.toJSON(this.lpTokenSupply),
     }
   }
