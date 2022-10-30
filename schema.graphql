@@ -97,9 +97,9 @@ type Transaction @entity {
     timestamp: BigInt!
     # This is not the reverse of Mint.transaction; it is only used to
     # track incomplete mints (similar for burns and swaps)
-    mints: [Mint]!
-    burns: [Burn]!
-    swaps: [Swap]!
+    mints: [Mint]! @derivedFrom(field: "transaction")
+    burns: [Burn]! @derivedFrom(field: "transaction")
+    swaps: [Swap]! @derivedFrom(field: "transaction")
 }
 
 type Mint @entity {
@@ -180,8 +180,8 @@ type Bundle @entity {
     ethPrice: BigDecimal! # price of ETH usd
 }
 
-# Data accumulated and condensed into day stats for all of Uniswap
-type UniswapDayData @entity {
+# Data accumulated and condensed into day stats for all of Arthswap
+type ArthswapDayData @entity {
     id: ID! # timestamp rounded to current day by dividing by 86400
     date: Int!
 

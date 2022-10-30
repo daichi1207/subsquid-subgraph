@@ -5,8 +5,8 @@ import {Transaction} from "./transaction.model"
 import {Pair} from "./pair.model"
 
 @Entity_()
-export class Swap {
-  constructor(props?: Partial<Swap>) {
+export class Mint {
+  constructor(props?: Partial<Mint>) {
     Object.assign(this, props)
   }
 
@@ -25,29 +25,29 @@ export class Swap {
   pair!: Pair
 
   @Column_("bytea", {nullable: false})
-  sender!: Uint8Array
-
-  @Column_("bytea", {nullable: false})
-  from!: Uint8Array
-
-  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
-  amount0In!: BigDecimal
-
-  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
-  amount1In!: BigDecimal
-
-  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
-  amount0Out!: BigDecimal
-
-  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
-  amount1Out!: BigDecimal
-
-  @Column_("bytea", {nullable: false})
   to!: Uint8Array
+
+  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
+  liquidity!: BigDecimal
+
+  @Column_("bytea", {nullable: true})
+  sender!: Uint8Array | undefined | null
+
+  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: true})
+  amount0!: BigDecimal | undefined | null
+
+  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: true})
+  amount1!: BigDecimal | undefined | null
 
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
   logIndex!: bigint | undefined | null
 
-  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
-  amountUSD!: BigDecimal
+  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: true})
+  amountUSD!: BigDecimal | undefined | null
+
+  @Column_("bytea", {nullable: true})
+  feeTo!: Uint8Array | undefined | null
+
+  @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: true})
+  feeLiquidity!: BigDecimal | undefined | null
 }
