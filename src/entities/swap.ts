@@ -1,26 +1,33 @@
 import { EvmLogHandlerContext } from '@subsquid/substrate-processor';
 import { Store } from '@subsquid/typeorm-store';
 import * as pancakeRouter from '../abi/pancakeRouter';
-import { Swap } from '../model';
+import { Pair, Swap, Transaction } from '../model';
 
-export async function getOrCreateSwap(
+export async function getOrCreateTransaction(
     ctx: EvmLogHandlerContext<Store>,
-    address: string
+    txHash: string
 ) {
-    // let swap = await ctx.store.get(Swap, address);
+    let transaction = await ctx.store.get(Transaction, txHash);
+
+    if (transaction == null) {
+        transaction = new Transaction({ id: txHash });
+        transaction.blockNumber = BigInt(ctx.block.height);
+        transaction.timestamp = BigInt(ctx.block.timestamp);
+        transaction.mints = [];
+        transaction.burns = [];
+        transaction.swaps = [];
+    }
 }
 
-export async function getBalancesSwap(
+export async function getOrCreatePair(
     ctx: EvmLogHandlerContext<Store>,
-    swap: string,
-    N_COINS: number
-): Promise<bigint[]> {
-    let swapContract = new pancakeRouter.Contract(ctx, swap);
-    let balances: bigint[] = new Array(N_COINS);
+    address: string
+): Promise<Pair> {
+    const pair = await ctx.store.get(Pair, address);
 
-    for (let i =0 ; i < N_COINS; ++i){
-        balances[i] = await swapContract.
-
-
+    if (pair == null) {
+        // pair = new Pair({ id: address });
+        // pair;
     }
+    return pair;
 }
