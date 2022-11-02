@@ -9,10 +9,12 @@ import {
 } from '@subsquid/substrate-processor';
 import { In } from 'typeorm';
 import { ethers } from 'ethers';
-import * as erc20 from './abi/erc20';
+import * as ERC20 from './abi/erc20';
 import * as pancakePair from './abi/PancakePair';
 // import * as pancakeRouter from './abi/pancakeRouter';
 import * as pancakePairHandlers from './mapping/pancakePair';
+import * as ERC20Handlers from './mapping/erc20';
+import { ARSWToken } from './mapping/helper';
 
 const database = new TypeormDatabase();
 const processor = new SubstrateBatchProcessor()
@@ -21,7 +23,7 @@ const processor = new SubstrateBatchProcessor()
         chain: 'wss://astar.public.blastapi.io',
         archive: lookupArchive('astar', { release: 'FireSquid' }),
     })
-    // ARSW/WASTR pool
+    // ARSW/WASTR-lp
     // add range if we get it
     .addEvmLog('0x50497e7181eb9e8ccd70a9c44fb997742149482a', {
         filter: [
@@ -32,6 +34,9 @@ const processor = new SubstrateBatchProcessor()
                     .topic,
             ],
         ],
+    })
+    .addEvmLog(ARSWToken, {
+        filter: [[ERC20.events['Transfer(address,address,uint256)'].topic]],
     });
 
 processor.run(database, async (ctx) => {
@@ -63,6 +68,17 @@ processor.run(database, async (ctx) => {
                                 break;
                         }
                         break;
+                    case ARSWToken:
+                        switch (item.event.args.topics[0]) {
+                            case ERC20.events[
+                                'Transfer(address,address,uint256)'
+                            ].topic:
+                                await ERC20Handlers.handleTransfer({
+                                    ...ctx,
+                                    block: block.header,
+                                    event: item.event,
+                                });
+                        }
                 }
             }
         }
