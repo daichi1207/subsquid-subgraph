@@ -1,10 +1,9 @@
 import { decodeHex, EvmLogHandlerContext } from '@subsquid/substrate-processor';
 import { Store } from '@subsquid/typeorm-store';
-import { Big as BigDecimal } from 'big.js';
-import { FactoryAddress } from '../mapping/helper';
+import { FactoryAddress, ZERO_BD } from '../mapping/helper';
 import { ArthswapFactory } from '../model';
 
-export async function getArthswapFactory(
+export async function getOrCreateArthswapFactory(
     ctx: EvmLogHandlerContext<Store>
 ): Promise<ArthswapFactory> {
     let factory = await ctx.store.get(ArthswapFactory, FactoryAddress);
@@ -13,13 +12,13 @@ export async function getArthswapFactory(
         factory = new ArthswapFactory({ id: FactoryAddress });
 
         factory.pairCount = 0;
-        factory.totalVolumeUSD = BigDecimal('0');
-        factory.totalVolumeETH = BigDecimal('0');
+        factory.totalVolumeUSD = ZERO_BD;
+        factory.totalVolumeETH = ZERO_BD;
 
-        factory.untrackedVolumeUSD = BigDecimal('0');
+        factory.untrackedVolumeUSD = ZERO_BD;
 
-        factory.totalLiquidityUSD = BigDecimal('0');
-        factory.totalLiquidityETH = BigDecimal('0');
+        factory.totalLiquidityUSD = ZERO_BD;
+        factory.totalLiquidityETH = ZERO_BD;
 
         factory.txCount = BigInt('0');
     }
@@ -27,8 +26,4 @@ export async function getArthswapFactory(
     factory.txCount += 1n;
 
     return factory;
-}
-
-export function toSeconds(timestamp: number) {
-    return Math.floor(timestamp / 1000);
 }
