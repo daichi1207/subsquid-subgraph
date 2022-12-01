@@ -1,10 +1,8 @@
 process: migrate
 	@node -r dotenv/config lib/processor.js
 
-
-build:
-	@npm run build
-
+pairs:
+	@node -r dotenv/config lib/pairsProcessor.js
 
 serve:
 	@npx squid-graphql-server
@@ -18,12 +16,24 @@ migration:
 	@npx squid-typeorm-migration generate
 
 
+build:
+	@npm run build
+
+
 codegen:
 	@npx squid-typeorm-codegen
 
 
 typegen:
-	@npx squid-substrate-typegen typegen.json
+	@make explore
+	@npx squid-substrate-typegen ./typegen/typegen.json
+
+
+explore:
+	@npx squid-substrate-metadata-explorer \
+		--chain wss://astar.api.onfinality.io/public-ws \
+		--archive https://astar.archive.subsquid.io/graphql \
+		--out ./typegen/versions.jsonl
 
 
 up:
@@ -34,4 +44,4 @@ down:
 	@docker-compose down
 
 
-.PHONY: build serve process migrate codegen typegen up down
+.PHONY: process serve start codegen migration migrate up down typegen pairs

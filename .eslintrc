@@ -55,7 +55,9 @@
         "default-case": "off",
         "import/order": "off",
         "prefer-template": "off",
-        "prefer-const": "off"
+        "prefer-const": "off",
+        "eqeqeq": "warn",
+        "prefer-destructuring": "warn"
     },
     "ignorePatterns": ["src/model/generated", "src/types", "db"]
 }
