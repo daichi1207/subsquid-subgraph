@@ -1,39 +1,46 @@
-import { decodeHex, EvmLogHandlerContext } from '@subsquid/substrate-processor';
-import { Store } from '@subsquid/typeorm-store';
-import * as ERC20 from '../abi/erc20';
-import { ZERO_BD, ZERO_BI } from '../mapping/helper';
-import { Token } from '../model';
+import { ZERO_BD } from '../consts'
+
+import { Token } from '../model'
+
+import * as ERC20 from '../types/abi/erc20'
+import { BaseMapper, EntityMap } from '../mappers/baseMapper'
+import { BigDecimal } from '@subsquid/big-decimal'
 
 export async function getOrCreateToken(
-    ctx: EvmLogHandlerContext<Store>,
-    address: string
+    this: BaseMapper<unknown>,
+    entities: EntityMap,
+    tokenId: string
 ): Promise<Token> {
-    let token = await ctx.store.get(Token, address);
+    let token = entities.get(Token).get(tokenId)
+    if (token != null) return token
 
-    if (token == null) {
-        const erc20 = new ERC20.Contract(ctx, address);
-        const name = await erc20.name();
-        const symbol = await erc20.symbol();
-        const decimals = await erc20.decimals();
-        let totalSupply = (await erc20.totalSupply()).toBigInt();
-
-        token = new Token({ id: address });
-        token.name = name;
-        token.symbol = symbol;
-        token.decimals = BigInt(decimals);
-        token.totalSupply = totalSupply;
-        token.tradeVolume = ZERO_BD;
-        token.tradeVolumeUSD = ZERO_BD;
-        token.untrackedVolumeUSD = ZERO_BD;
-        token.txCount = BigInt(0);
-        token.totalLiquidity = ZERO_BD;
-        token.tokenDayData = [];
-        token.pairDayDataBase = [];
-        token.pairDayDataQuote = [];
-        token.pairBase = [];
-        token.pairQuote = [];
-        await ctx.store.save(token);
+    token = await this.ctx.store.get(Token, tokenId)
+    if (token != null) {
+        entities.get(Token).set(tokenId, token)
+        return token
     }
 
-    return token;
+    const erc20 = new ERC20.Contract(this.ctx, this.block, tokenId)
+
+    const name = await erc20.name()
+    const symbol = await erc20.symbol()
+    const decimals = await erc20.decimals()
+    const totalSupply = await erc20.totalSupply()
+
+    token = new Token({
+        id: tokenId.toLowerCase(),
+        symbol,
+        name,
+        totalSupply: BigDecimal(totalSupply.toBigInt(), decimals).toFixed(),
+        decimals,
+        derivedETH: ZERO_BD,
+        tradeVolume: ZERO_BD,
+        tradeVolumeUSD: ZERO_BD,
+        untrackedVolumeUSD: ZERO_BD,
+        totalLiquidity: ZERO_BD,
+        txCount: 0,
+    })
+    entities.get(Token).set(tokenId, token)
+
+    return token
 }
