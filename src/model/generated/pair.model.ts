@@ -2,10 +2,8 @@ import {BigDecimal} from "@subsquid/big-decimal"
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
 import {Token} from "./token.model"
-import {PairHourData} from "./pairHourData.model"
-import {Mint} from "./mint.model"
-import {Burn} from "./burn.model"
-import {Swap} from "./swap.model"
+import {LiquidityPosition} from "./liquidityPosition.model"
+import {TokenSwapEvent} from "./tokenSwapEvent.model"
 
 @Entity_()
 export class Pair {
@@ -20,9 +18,15 @@ export class Pair {
   @ManyToOne_(() => Token, {nullable: true})
   token0!: Token
 
+  @Column_("text", {nullable: false})
+  token0Id!: string
+
   @Index_()
   @ManyToOne_(() => Token, {nullable: true})
   token1!: Token
+
+  @Column_("text", {nullable: false})
+  token1Id!: string
 
   @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
   reserve0!: BigDecimal
@@ -60,24 +64,21 @@ export class Pair {
   @Column_("numeric", {transformer: marshal.bigdecimalTransformer, nullable: false})
   untrackedVolumeUSD!: BigDecimal
 
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  txCount!: bigint
+  @Column_("int4", {nullable: false})
+  txCount!: number
 
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  createdAtTimestamp!: bigint
+  @Column_("timestamp with time zone", {nullable: false})
+  createdAtTimestamp!: Date
 
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  createdAtBlockNumber!: bigint
+  @Column_("int4", {nullable: false})
+  createdAtBlockNumber!: number
 
-  @OneToMany_(() => PairHourData, e => e.pair)
-  pairHourData!: PairHourData[]
+  @Column_("int4", {nullable: false})
+  liquidityProviderCount!: number
 
-  @OneToMany_(() => Mint, e => e.pair)
-  mints!: Mint[]
+  @OneToMany_(() => LiquidityPosition, e => e.pair)
+  liquidityPositions!: LiquidityPosition[]
 
-  @OneToMany_(() => Burn, e => e.pair)
-  burns!: Burn[]
-
-  @OneToMany_(() => Swap, e => e.pair)
-  swaps!: Swap[]
+  @OneToMany_(() => TokenSwapEvent, e => e.pair)
+  swaps!: TokenSwapEvent[]
 }
