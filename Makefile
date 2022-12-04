@@ -31,8 +31,8 @@ typegen:
 
 explore:
 	@npx squid-substrate-metadata-explorer \
-		--chain wss://astar.api.onfinality.io/public-ws \
-		--archive https://astar.archive.subsquid.io/graphql \
+		--chain wss://wss.api.moonriver.moonbeam.network \
+		--archive https://moonriver.archive.subsquid.io/graphql \
 		--out ./typegen/versions.jsonl
 
 

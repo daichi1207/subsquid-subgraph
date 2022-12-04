@@ -14,6 +14,7 @@ export const WHITELIST: string[] = [
     '0xAeaaf0e2c81Af264101B9129C00F4440cCF0F720'.toLowerCase(), //WGLMR
     '0x6a2d262D56735DbA19Dd70682B39F6bE9a931D98'.toLowerCase(), //USDC
 ]
+// ]
 
 export async function getEthPriceInUSD(this: BaseMapper<unknown>, entities: EntityMap): Promise<BigDecimal> {
     let usdcPair = entities.get(Pair).get(WGLMR_USDC_ADDRESS)

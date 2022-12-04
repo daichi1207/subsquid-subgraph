@@ -164,4 +164,3 @@ type Pool @entity {
 
   swaps: [TokenSwapEvent!] @derivedFrom(field: "pool")
 }
- 

@@ -5,7 +5,7 @@ import * as erc20 from '../types/abi/erc20'
 import * as erc20NameBytes from '../types/abi/erc20NameBytes'
 import * as erc20SymbolBytes from '../types/abi/erc20SymbolBytes'
 import { ZERO_BD } from '../consts'
-import { BigDecimal } from '@subsquid/big-decimal'
+import {BigDecimal} from '@subsquid/big-decimal'
 
 async function fetchTokenSymbol(
     contract: erc20.Contract,
@@ -64,6 +64,40 @@ export function createLiquidityPosition(data: LiquidityPositionData): LiquidityP
     })
 }
 
+// interface LiquiditySnapshotData {
+//     position: LiquidityPosition
+//     block: SubstrateBlock
+//     bundle: Bundle
+//     pair: Pair
+//     user: User
+// }
+
+// export function createLiquiditySnapshot(data: LiquiditySnapshotData): LiquidityPositionSnapshot {
+//     const { position, block, bundle, pair, user } = data
+
+//     const token0 = pair.token0
+//     const token1 = pair.token1
+
+//     // create new snapshot
+//     const snapshot = new LiquidityPositionSnapshot({
+//         id: `${position.id}-${block.timestamp}`,
+//         liquidityPosition: position,
+//         timestamp: new Date(block.timestamp),
+//         block: BigInt(block.height),
+//         user,
+//         pair,
+//         token0PriceUSD: token0.derivedETH * bundle.ethPrice,
+//         token1PriceUSD: token1.derivedETH * bundle.ethPrice,
+//         reserve0: pair.reserve0,
+//         reserve1: pair.reserve1,
+//         reserveUSD: pair.reserveUSD,
+//         liquidityTokenTotalSupply: pair.totalSupply,
+//         liquidityTokenBalance: position.liquidityTokenBalance,
+//     })
+
+//     return snapshot
+// }
+
 export async function createToken(
     ctx: BatchContext<Store, unknown>,
     block: SubstrateBlock,
@@ -71,9 +105,9 @@ export async function createToken(
 ): Promise<Token> {
     const contract = new erc20.Contract(ctx, block, address)
     const contractNameBytes = new erc20NameBytes.Contract(ctx, block, address)
-    const contractSymbolBytes = new erc20SymbolBytes.Contract(ctx, block, address)
+    const contractSympolBytes = new erc20SymbolBytes.Contract(ctx, block, address)
 
-    const symbol = await fetchTokenSymbol(contract, contractSymbolBytes)
+    const symbol = await fetchTokenSymbol(contract, contractSympolBytes)
     const name = await fetchTokenName(contract, contractNameBytes)
     const totalSupply = await fetchTokenTotalSupply(contract)
     const decimals = await fetchTokenDecimals(contract)
