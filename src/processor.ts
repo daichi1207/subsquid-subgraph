@@ -1,7 +1,6 @@
 import { BatchContext, EvmLogEvent, SubstrateBatchProcessor, SubstrateBlock } from '@subsquid/substrate-processor'
 import * as factory from './types/abi/factory'
 import * as pair from './types/abi/pair'
-import * as swapFlashLoan from './types/abi/swapFlashLoan'
 import { CHAIN_NODE, DAY_MS, FACTORY_ADDRESS, HOUR_MS, MONTH_MS, WEEK_MS } from './consts'
 import { Store, TypeormDatabase } from '@subsquid/typeorm-store'
 import {
@@ -21,7 +20,6 @@ import { Between, Not, In } from 'typeorm'
 import { BaseMapper, EntityClass, EntityMap } from './mappers/baseMapper'
 import { NewPairMapper } from './mappers/factory'
 import { BurnMapper, MintMapper, SwapMapper, SyncMapper, TransferMapper } from './mappers/pairs'
-import { TokenSwapMapper } from './mappers/swapFlashLoan'
 import { BigDecimal } from '@subsquid/big-decimal'
 import { readFileSync } from 'fs'
 import { getEvmLog, getTransaction } from '@subsquid/substrate-frontier-evm'
@@ -53,14 +51,6 @@ const processor = new SubstrateBatchProcessor()
             from: knownContracts.lastBlock + 1,
         },
     })
-// .addEvmLog('0x8273De7090C7067f3aE1b6602EeDbd2dbC02C48f', {
-//     filter: [[swapFlashLoan.events['TokenSwap(address,uint256,uint256,uint128,uint128)'].topic]],
-//     range: { from: 1329660 },
-// })
-// .addEvmLog('0x09A793cCa9D98b14350F2a767Eb5736AA6B6F921', {
-//     filter: [[swapFlashLoan.events['TokenSwap(address,uint256,uint256,uint128,uint128)'].topic]],
-//     range: { from: 1298636 },
-// })
 
 for (const address of knownContracts.pools) {
     processor.addEvmLog(address, {
@@ -120,7 +110,7 @@ processor.run(database, async (ctx) => {
     await ctx.store.save([...entities.get(Pool).values()])
     await ctx.store.save([...entities.get(LiquidityPosition).values()])
     await ctx.store.save([...entities.get(Transaction).values()])
-    await ctx.store.save([...entities.get(TokenSwapEvent).values()])
+    // await ctx.store.save([...entities.get(TokenSwapEvent).values()])
 
     for (const [entityClass, entity] of entities) {
         ctx.log.info(`saved ${entity.size} ${entityClass.name}`)
@@ -152,10 +142,6 @@ async function handleEvmLog(
     switch (contractAddress) {
         case FACTORY_ADDRESS:
             return await new NewPairMapper(ctx, block).parse(evmLog)
-        // case '0x8273De7090C7067f3aE1b6602EeDbd2dbC02C48f'.toLowerCase():
-        // case '0x09A793cCa9D98b14350F2a767Eb5736AA6B6F921'.toLowerCase(): {
-        //     return await new TokenSwapMapper(ctx, block).parse(evmLog, transaction)
-        // }
         default:
             if (await isKnownPairContracts(ctx.store, contractAddress)) {
                 switch (evmLog.topics[0]) {

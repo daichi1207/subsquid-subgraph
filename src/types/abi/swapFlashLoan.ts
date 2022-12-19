@@ -3,31 +3,31 @@ import assert from "assert";
 
 export const abi = new ethers.utils.Interface(getJsonAbi());
 
-export type AddLiquidity0Event = ([provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber] & { provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber })
+export type AddLiquidity0Event = ([provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber] & {provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber})
 
-export type FlashLoan0Event = ([receiver: string, tokenIndex: number, amount: ethers.BigNumber, amountFee: ethers.BigNumber, protocolFee: ethers.BigNumber] & { receiver: string, tokenIndex: number, amount: ethers.BigNumber, amountFee: ethers.BigNumber, protocolFee: ethers.BigNumber })
+export type FlashLoan0Event = ([receiver: string, tokenIndex: number, amount: ethers.BigNumber, amountFee: ethers.BigNumber, protocolFee: ethers.BigNumber] & {receiver: string, tokenIndex: number, amount: ethers.BigNumber, amountFee: ethers.BigNumber, protocolFee: ethers.BigNumber})
 
-export type NewAdminFee0Event = ([newAdminFee: ethers.BigNumber] & { newAdminFee: ethers.BigNumber })
+export type NewAdminFee0Event = ([newAdminFee: ethers.BigNumber] & {newAdminFee: ethers.BigNumber})
 
-export type NewSwapFee0Event = ([newSwapFee: ethers.BigNumber] & { newSwapFee: ethers.BigNumber })
+export type NewSwapFee0Event = ([newSwapFee: ethers.BigNumber] & {newSwapFee: ethers.BigNumber})
 
-export type OwnershipTransferred0Event = ([previousOwner: string, newOwner: string] & { previousOwner: string, newOwner: string })
+export type OwnershipTransferred0Event = ([previousOwner: string, newOwner: string] & {previousOwner: string, newOwner: string})
 
-export type Paused0Event = ([account: string] & { account: string })
+export type Paused0Event = ([account: string] & {account: string})
 
-export type RampA0Event = ([oldA: ethers.BigNumber, newA: ethers.BigNumber, initialTime: ethers.BigNumber, futureTime: ethers.BigNumber] & { oldA: ethers.BigNumber, newA: ethers.BigNumber, initialTime: ethers.BigNumber, futureTime: ethers.BigNumber })
+export type RampA0Event = ([oldA: ethers.BigNumber, newA: ethers.BigNumber, initialTime: ethers.BigNumber, futureTime: ethers.BigNumber] & {oldA: ethers.BigNumber, newA: ethers.BigNumber, initialTime: ethers.BigNumber, futureTime: ethers.BigNumber})
 
-export type RemoveLiquidity0Event = ([provider: string, tokenAmounts: Array<ethers.BigNumber>, lpTokenSupply: ethers.BigNumber] & { provider: string, tokenAmounts: Array<ethers.BigNumber>, lpTokenSupply: ethers.BigNumber })
+export type RemoveLiquidity0Event = ([provider: string, tokenAmounts: Array<ethers.BigNumber>, lpTokenSupply: ethers.BigNumber] & {provider: string, tokenAmounts: Array<ethers.BigNumber>, lpTokenSupply: ethers.BigNumber})
 
-export type RemoveLiquidityImbalance0Event = ([provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber] & { provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber })
+export type RemoveLiquidityImbalance0Event = ([provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber] & {provider: string, tokenAmounts: Array<ethers.BigNumber>, fees: Array<ethers.BigNumber>, invariant: ethers.BigNumber, lpTokenSupply: ethers.BigNumber})
 
-export type RemoveLiquidityOne0Event = ([provider: string, lpTokenAmount: ethers.BigNumber, lpTokenSupply: ethers.BigNumber, boughtId: ethers.BigNumber, tokensBought: ethers.BigNumber] & { provider: string, lpTokenAmount: ethers.BigNumber, lpTokenSupply: ethers.BigNumber, boughtId: ethers.BigNumber, tokensBought: ethers.BigNumber })
+export type RemoveLiquidityOne0Event = ([provider: string, lpTokenAmount: ethers.BigNumber, lpTokenSupply: ethers.BigNumber, boughtId: ethers.BigNumber, tokensBought: ethers.BigNumber] & {provider: string, lpTokenAmount: ethers.BigNumber, lpTokenSupply: ethers.BigNumber, boughtId: ethers.BigNumber, tokensBought: ethers.BigNumber})
 
-export type StopRampA0Event = ([currentA: ethers.BigNumber, time: ethers.BigNumber] & { currentA: ethers.BigNumber, time: ethers.BigNumber })
+export type StopRampA0Event = ([currentA: ethers.BigNumber, time: ethers.BigNumber] & {currentA: ethers.BigNumber, time: ethers.BigNumber})
 
-export type TokenSwap0Event = ([buyer: string, tokensSold: ethers.BigNumber, tokensBought: ethers.BigNumber, soldId: ethers.BigNumber, boughtId: ethers.BigNumber] & { buyer: string, tokensSold: ethers.BigNumber, tokensBought: ethers.BigNumber, soldId: ethers.BigNumber, boughtId: ethers.BigNumber })
+export type TokenSwap0Event = ([buyer: string, tokensSold: ethers.BigNumber, tokensBought: ethers.BigNumber, soldId: ethers.BigNumber, boughtId: ethers.BigNumber] & {buyer: string, tokensSold: ethers.BigNumber, tokensBought: ethers.BigNumber, soldId: ethers.BigNumber, boughtId: ethers.BigNumber})
 
-export type Unpaused0Event = ([account: string] & { account: string })
+export type Unpaused0Event = ([account: string] & {account: string})
 
 export interface EvmEvent {
   data: string;
@@ -136,26 +136,26 @@ export const events = {
   ,
 }
 
-interface ChainContext {
+interface ChainContext  {
   _chain: Chain
 }
 
-interface BlockContext {
+interface BlockContext  {
   _chain: Chain
   block: Block
 }
 
-interface Block {
+interface Block  {
   height: number
 }
 
-interface Chain {
-  client: {
-    call: <T = any>(method: string, params?: unknown[]) => Promise<T>
+interface Chain  {
+  client:  {
+    call: <T=any>(method: string, params?: unknown[]) => Promise<T>
   }
 }
 
-export class Contract {
+export class Contract  {
   private readonly _chain: Chain
   private readonly blockHeight: number
   readonly address: string
@@ -164,11 +164,11 @@ export class Contract {
   constructor(ctx: ChainContext, block: Block, address: string)
   constructor(ctx: BlockContext, blockOrAddress: Block | string, address?: string) {
     this._chain = ctx._chain
-    if (typeof blockOrAddress === 'string') {
+    if (typeof blockOrAddress === 'string')  {
       this.blockHeight = ctx.block.height
       this.address = ethers.utils.getAddress(blockOrAddress)
     }
-    else {
+    else  {
       assert(address != null)
       this.blockHeight = blockOrAddress.height
       this.address = ethers.utils.getAddress(address)
@@ -263,14 +263,14 @@ export class Contract {
     return this.call("protocolFeeShareBPS", [])
   }
 
-  async swapStorage(): Promise<([initialA: ethers.BigNumber, futureA: ethers.BigNumber, initialATime: ethers.BigNumber, futureATime: ethers.BigNumber, swapFee: ethers.BigNumber, adminFee: ethers.BigNumber, lpToken: string] & { initialA: ethers.BigNumber, futureA: ethers.BigNumber, initialATime: ethers.BigNumber, futureATime: ethers.BigNumber, swapFee: ethers.BigNumber, adminFee: ethers.BigNumber, lpToken: string })> {
+  async swapStorage(): Promise<([initialA: ethers.BigNumber, futureA: ethers.BigNumber, initialATime: ethers.BigNumber, futureATime: ethers.BigNumber, swapFee: ethers.BigNumber, adminFee: ethers.BigNumber, lpToken: string] & {initialA: ethers.BigNumber, futureA: ethers.BigNumber, initialATime: ethers.BigNumber, futureATime: ethers.BigNumber, swapFee: ethers.BigNumber, adminFee: ethers.BigNumber, lpToken: string})> {
     return this.call("swapStorage", [])
   }
 
-  private async call(name: string, args: any[]): Promise<any> {
+  private async call(name: string, args: any[]) : Promise<any> {
     const fragment = abi.getFunction(name)
     const data = abi.encodeFunctionData(fragment, args)
-    const result = await this._chain.client.call('eth_call', [{ to: this.address, data }, this.blockHeight])
+    const result = await this._chain.client.call('eth_call', [{to: this.address, data}, this.blockHeight])
     const decoded = abi.decodeFunctionResult(fragment, result)
     return decoded.length > 1 ? decoded : decoded[0]
   }

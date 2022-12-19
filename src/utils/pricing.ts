@@ -5,21 +5,21 @@ import { BaseMapper, EntityMap } from '../mappers/baseMapper'
 import assert from 'assert'
 import { BigDecimal } from '@subsquid/big-decimal'
 
-export const WGLMR_ADDRESS = '0xAeaaf0e2c81Af264101B9129C00F4440cCF0F720'.toLowerCase() //Replace with wrapped glint
-export const WGLMR_USDC_ADDRESS = '0xBB1290c1829007F440C771b37718FAbf309cd527'.toLowerCase() //replace with wglint usdc LP address
-export const USDC = '0x6a2d262D56735DbA19Dd70682B39F6bE9a931D98'.toLowerCase() // replace with USDC address
+export const WASTR_ADDRESS = '0xAeaaf0e2c81Af264101B9129C00F4440cCF0F720'.toLowerCase()
+export const WASTR_USDC_ADDRESS = '0xBB1290c1829007F440C771b37718FAbf309cd527'.toLowerCase()
+export const USDC = '0x6a2d262D56735DbA19Dd70682B39F6bE9a931D98'.toLowerCase()
 
 export const WHITELIST: string[] = [
-    '0xDe2578Edec4669BA7F41c5d5D2386300bcEA4678'.toLowerCase(), //GLINT
-    '0xAeaaf0e2c81Af264101B9129C00F4440cCF0F720'.toLowerCase(), //WGLMR
+    '0xDe2578Edec4669BA7F41c5d5D2386300bcEA4678'.toLowerCase(), //ARSW
+    '0xAeaaf0e2c81Af264101B9129C00F4440cCF0F720'.toLowerCase(), //WASTR
     '0x6a2d262D56735DbA19Dd70682B39F6bE9a931D98'.toLowerCase(), //USDC
 ]
 // ]
 
 export async function getEthPriceInUSD(this: BaseMapper<unknown>, entities: EntityMap): Promise<BigDecimal> {
-    let usdcPair = entities.get(Pair).get(WGLMR_USDC_ADDRESS)
+    let usdcPair = entities.get(Pair).get(WASTR_USDC_ADDRESS)
     if (usdcPair == null) {
-        usdcPair = await this.ctx.store.get(Pair, WGLMR_USDC_ADDRESS)
+        usdcPair = await this.ctx.store.get(Pair, WASTR_USDC_ADDRESS)
         assert(usdcPair != null)
         entities.get(Pair).set(usdcPair.id, usdcPair)
     }
@@ -43,7 +43,7 @@ export async function findEthPerToken(
     entities: EntityMap,
     tokenId: string
 ): Promise<BigDecimal> {
-    if (tokenId === WGLMR_ADDRESS) return ONE_BD
+    if (tokenId === WASTR_ADDRESS) return ONE_BD
 
     // loop through whitelist and check if paired with any
     for (let i = 0; i < WHITELIST.length; i++) {
