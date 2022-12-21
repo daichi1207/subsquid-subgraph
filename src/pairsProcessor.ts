@@ -32,7 +32,6 @@ processor.run(new TypeormDatabase({ stateSchema: 'pairs' }), async (ctx) => {
                     JSON.stringify({ lastBlock: block.header.height, pools: knownPools })
                 )
             }
-            // if (item.kind === 'log' && item.address === '0xdac17f958d2ee523a2206206994597c13d831ec7')
         }
     }
 })
