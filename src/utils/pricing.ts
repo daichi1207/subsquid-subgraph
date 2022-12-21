@@ -16,11 +16,13 @@ export const WHITELIST: string[] = [
 ]
 
 export async function getEthPriceInUSD(this: BaseMapper<unknown>, entities: EntityMap): Promise<BigDecimal> {
-    console.log(entities)
+    // console.log(entities)
     let usdcPair = entities.get(Pair).get(WASTR_USDC_ADDRESS)
     if (usdcPair == null) {
         usdcPair = await this.ctx.store.get(Pair, WASTR_USDC_ADDRESS)
-        console.log(usdcPair)
+        if (usdcPair == null) {
+            return BigDecimal(0);
+        }
         assert(usdcPair != null)
         entities.get(Pair).set(usdcPair.id, usdcPair)
     }
