@@ -5,8 +5,8 @@ import { EvmLogEvent } from '@subsquid/substrate-processor'
 import * as SwapFlash from '../types/abi/swapFlashLoan'
 import { BaseMapper, EntityClass, EntityMap } from './baseMapper'
 import { BigDecimal } from '@subsquid/big-decimal'
-import {EvmLog} from '@subsquid/substrate-frontier-evm'
-import {Transaction} from '@subsquid/substrate-frontier-evm/lib/transaction'
+import { EvmLog } from '@subsquid/substrate-frontier-evm'
+import { Transaction } from '@subsquid/substrate-frontier-evm/lib/transaction'
 
 interface TokenSwapData {
     txHash: string

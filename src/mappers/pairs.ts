@@ -178,7 +178,7 @@ export class SyncMapper extends BaseMapper<SyncData> {
 
         pair.token0Price = !pair.reserve1.eq(ZERO_BD) ? pair.reserve0.div(pair.reserve1) : ZERO_BD
         pair.token1Price = !pair.reserve0.eq(ZERO_BD) ? pair.reserve1.div(pair.reserve0) : ZERO_BD
-
+        // TODO: bug here
         // update ETH price now that reserves could have changed
         bundle.ethPrice = await getEthPriceInUSD.call(this, entities)
 

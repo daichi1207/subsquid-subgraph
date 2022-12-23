@@ -31,7 +31,7 @@ const knownContracts: { lastBlock: number; pools: string[] } = JSON.parse(
 const database = new TypeormDatabase()
 const processor = new SubstrateBatchProcessor()
     .setBatchSize(200)
-    .setBlockRange({ from: 199900 })
+    .setBlockRange({ from: 100000 })
     .setDataSource({
         chain: CHAIN_NODE,
         archive: 'https://astar.archive.subsquid.io/graphql',
@@ -110,7 +110,7 @@ processor.run(database, async (ctx) => {
     await ctx.store.save([...entities.get(Pool).values()])
     await ctx.store.save([...entities.get(LiquidityPosition).values()])
     await ctx.store.save([...entities.get(Transaction).values()])
-    // await ctx.store.save([...entities.get(TokenSwapEvent).values()])
+    await ctx.store.save([...entities.get(TokenSwapEvent).values()])
 
     for (const [entityClass, entity] of entities) {
         ctx.log.info(`saved ${entity.size} ${entityClass.name}`)
