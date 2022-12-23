@@ -1,0 +1,14 @@
+manifestVersion: subsquid.io/v0.1
+name: subgraph
+version: 1
+description: |-
+  The very first squid from manifest  
+build:
+
+deploy:
+  addons:
+    postgres:
+  processor:
+    cmd: [ "node", "lib/processor", "lib/pairsProcessor" ]
+  api:
+    cmd: [ "npx", "squid-graphql-server"]
