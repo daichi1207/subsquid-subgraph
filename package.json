@@ -1,5 +1,5 @@
 {
-  "name": "kusama-balances",
+  "name": "Arthswap-subsquid",
   "private": true,
   "scripts": {
     "build": "rm -rf lib && tsc",
