@@ -152,9 +152,9 @@ async function handleEvmLog(
                     case pair.events['Swap(address,uint256,uint256,uint256,uint256,address)'].topic:
                         return await new SwapMapper(ctx, block).parse(evmLog, transaction)
                     case pair.events['Mint(address,uint256,uint256)'].topic:
-                        return await new MintMapper(ctx, block).parse(evmLog)
+                        return await new MintMapper(ctx, block).parse(evmLog, transaction)
                     case pair.events['Burn(address,uint256,uint256,address)'].topic:
-                        return await new BurnMapper(ctx, block).parse(evmLog)
+                        return await new BurnMapper(ctx, block).parse(evmLog, transaction)
                 }
             }
     }
