@@ -25,6 +25,7 @@ interface TransferData {
 export class TransferMapper extends BaseMapper<TransferData> {
     async parse(evmLog: EvmLog, transaction: EvmTransaction) {
         const contractAddress = evmLog.address
+        const sender = transaction.from;
 
         const data = transferEventAbi.decode(evmLog)
         // ignore initial transfers for first adds
@@ -39,7 +40,7 @@ export class TransferMapper extends BaseMapper<TransferData> {
             blockNumber: this.block.height,
             pairId: contractAddress,
             // user stats
-            fromId: data.from.toLowerCase(),
+            fromId: sender.toLowerCase(),
             toId: data.to.toLowerCase(),
             amount: data.value.toBigInt(),
         }

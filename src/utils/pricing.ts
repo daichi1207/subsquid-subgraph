@@ -16,8 +16,8 @@ export const WHITELIST: string[] = [
 ]
 
 export async function getEthPriceInUSD(this: BaseMapper<unknown>, entities: EntityMap): Promise<BigDecimal> {
-    // console.log(entities)
     let usdcPair = entities.get(Pair).get(WASTR_USDC_ADDRESS)
+    console.log(usdcPair);
     if (usdcPair == null) {
         usdcPair = await this.ctx.store.get(Pair, WASTR_USDC_ADDRESS)
         if (usdcPair == null) {
@@ -27,7 +27,7 @@ export async function getEthPriceInUSD(this: BaseMapper<unknown>, entities: Enti
         entities.get(Pair).set(usdcPair.id, usdcPair)
     }
 
-    // console.log(`usdcPair ${usdcPair.token0Price}, ${usdcPair.token1Price}`)
+    console.log(`usdcPair ${usdcPair.token0Price}, ${usdcPair.token1Price}`)
     return usdcPair.token0Id === USDC ? usdcPair.token0Price : usdcPair.token1Price
 }
 

@@ -5,7 +5,7 @@ import * as erc20 from '../types/abi/erc20'
 import * as erc20NameBytes from '../types/abi/erc20NameBytes'
 import * as erc20SymbolBytes from '../types/abi/erc20SymbolBytes'
 import { ZERO_BD } from '../consts'
-import {BigDecimal} from '@subsquid/big-decimal'
+import { BigDecimal } from '@subsquid/big-decimal'
 
 async function fetchTokenSymbol(
     contract: erc20.Contract,
@@ -71,13 +71,13 @@ export function createLiquidityPosition(data: LiquidityPositionData): LiquidityP
 //     pair: Pair
 //     user: User
 // }
-
+//
 // export function createLiquiditySnapshot(data: LiquiditySnapshotData): LiquidityPositionSnapshot {
 //     const { position, block, bundle, pair, user } = data
-
+//
 //     const token0 = pair.token0
 //     const token1 = pair.token1
-
+//
 //     // create new snapshot
 //     const snapshot = new LiquidityPositionSnapshot({
 //         id: `${position.id}-${block.timestamp}`,
@@ -94,7 +94,7 @@ export function createLiquidityPosition(data: LiquidityPositionData): LiquidityP
 //         liquidityTokenTotalSupply: pair.totalSupply,
 //         liquidityTokenBalance: position.liquidityTokenBalance,
 //     })
-
+//
 //     return snapshot
 // }
 
