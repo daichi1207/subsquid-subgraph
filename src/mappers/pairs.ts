@@ -232,14 +232,15 @@ interface MintData {
 }
 
 export class MintMapper extends BaseMapper<MintData> {
-    async parse(evmLog: EvmLog) {
+    async parse(evmLog: EvmLog, transaction: EvmTransaction) {
         const contractAddress = evmLog.address
+        const sender = transaction.from
 
-        const data = mintAbi.decode(evmLog)
+        // const data = mintAbi.decode(evmLog)
 
         this.data = {
             pairId: contractAddress,
-            fromId: data.sender.toLowerCase(),
+            fromId: sender.toLowerCase(),
         }
 
         return this
@@ -298,7 +299,7 @@ export class MintMapper extends BaseMapper<MintData> {
     }
 }
 
-const burnAbi = pairAbi.events['Burn(address,uint256,uint256,address)']
+// const burnAbi = pairAbi.events['Burn(address,uint256,uint256,address)']
 
 interface BurnData {
     pairId: string
@@ -306,14 +307,15 @@ interface BurnData {
 }
 
 export class BurnMapper extends BaseMapper<BurnData> {
-    async parse(evmLog: EvmLog) {
+    async parse(evmLog: EvmLog, transaction: EvmTransaction) {
         const contractAddress = evmLog.address
+        const sender = transaction.from
 
-        const data = burnAbi.decode(evmLog)
+        // const data = burnAbi.decode(evmLog)
 
         this.data = {
             pairId: contractAddress,
-            fromId: data.sender.toLowerCase(),
+            fromId: sender.toLowerCase(),
         }
 
         return this
@@ -390,6 +392,7 @@ interface SwapData {
 export class SwapMapper extends BaseMapper<SwapData> {
     async parse(evmLog: EvmLog, transaction: EvmTransaction) {
         const contractAddress = evmLog.address
+        const sender = transaction.from
 
         const data = swapAbi.decode(evmLog)
 
@@ -398,7 +401,7 @@ export class SwapMapper extends BaseMapper<SwapData> {
             timestamp: new Date(this.block.timestamp),
             blockNumber: this.block.height,
             pairId: contractAddress,
-            fromId: data.sender.toLowerCase(),
+            fromId: sender.toLowerCase(),
             amount0In: data.amount0In.toBigInt(),
             amount1In: data.amount1In.toBigInt(),
             amount0Out: data.amount0Out.toBigInt(),

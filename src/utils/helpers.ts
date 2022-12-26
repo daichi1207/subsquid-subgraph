@@ -1,4 +1,4 @@
-import { Token, LiquidityPosition, Pair } from '../model'
+import { Bundle, Token, LiquidityPosition, Pair } from '../model'
 import { BatchContext, SubstrateBlock } from '@subsquid/substrate-processor'
 import { Store } from '@subsquid/typeorm-store'
 import * as erc20 from '../types/abi/erc20'
@@ -97,7 +97,7 @@ export function createLiquidityPosition(data: LiquidityPositionData): LiquidityP
 //
 //     return snapshot
 // }
-
+//
 export async function createToken(
     ctx: BatchContext<Store, unknown>,
     block: SubstrateBlock,
